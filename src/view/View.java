@@ -1,4 +1,7 @@
 package view;
 
-public class View {
+public class View implements Runnable {
+    public void run() {
+        System.out.println("View thread online.");
+    }
 }
