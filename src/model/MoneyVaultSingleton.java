@@ -1,13 +1,16 @@
 package model;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 public class MoneyVaultSingleton {
-    private long overallMoneyPool;
+    private double overallMoneyPool;
     private Semaphore moneyVaultLock;
+    private ConcurrentHashMap<Long, Account> accountsMap;
 
     private MoneyVaultSingleton() {
-        this.overallMoneyPool = Long.MAX_VALUE;
+        this.overallMoneyPool = Double.MAX_VALUE;
+        this.accountsMap = new ConcurrentHashMap<>();
         this.moneyVaultLock = new Semaphore(1);
     }
 
@@ -21,7 +24,7 @@ public class MoneyVaultSingleton {
         return this.moneyVaultLock;
     }
 
-    long getOverallMoneyPool() {
+    double getOverallMoneyPool() {
         return this.overallMoneyPool;
     }
 
@@ -29,4 +32,11 @@ public class MoneyVaultSingleton {
         this.overallMoneyPool += change;
     }
 
+    void addNewAccount(Account newAccount) {
+        this.accountsMap.put(newAccount.getAccountID(), newAccount);
+    }
+
+    void removeAccount(Account toRemove) {
+        this.accountsMap.remove(toRemove.getAccountID());
+    }
 }
